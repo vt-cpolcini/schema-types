@@ -1,4 +1,4 @@
-<p align="center"><img src="./support/logo.png" alt="schema-types logo" width="128" /></p>
+<p align="center"><img src="https://schema-types.dev/logo.png" alt="schema-types logo" width="128" /></p>
 
 # schema-types
 
