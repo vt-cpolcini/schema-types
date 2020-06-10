@@ -1,6 +1,6 @@
 {
   "name": "schema-types",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Runtime and compile-type type schema definition and validation",
   "license": "MIT",
   "main": "./dist/index.js",
