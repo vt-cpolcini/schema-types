@@ -1,0 +1,45 @@
+{
+  "name": "schema-type",
+  "version": "0.1.0",
+  "description": "Runtime and compile-type type schema definition and validation",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "watch": "tsc -b -w"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.3"
+  },
+  "funding": {
+    "type": "GitHub",
+    "url": "https://github.com/sponsors/jacobwgillespie"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "printWidth": 120,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "keywords": [
+    "typescript",
+    "json",
+    "schema",
+    "json-schema",
+    "types"
+  ]
+}
