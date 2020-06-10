@@ -1,3 +1,5 @@
+<p align="center"><img src="./support/logo.png" alt="schema-types logo" width="128" /></p>
+
 # schema-types
 
 **Status:** Alpha
