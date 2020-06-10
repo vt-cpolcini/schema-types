@@ -353,7 +353,7 @@ export function validate<T extends SchemaType>(schema: T, value: unknown): Valid
   return validateWithPath('', schema, value)
 }
 
-export function validateOrThrow<T extends SchemaType>(schema: T, value: unknown): void {
+export function validateOrThrow<T extends SchemaType>(schema: T, value: unknown): asserts value is TypeOf<T> {
   const issues = validate(schema, value)
   if (issues.length > 0) {
     throw new TypeError(formatIssues(issues))
