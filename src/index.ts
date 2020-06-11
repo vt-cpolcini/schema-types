@@ -46,7 +46,7 @@ export type SchemaType =
   | StringType
   | UndefinedType
   | ArrayType<SchemaType>
-  | MapType<SchemaType>
+  | RecordType<SchemaType>
   | ObjectType<any>
   | TupleType<SchemaType[]>
 
@@ -75,7 +75,7 @@ export interface ArrayType<T extends SchemaType> {
   items: T
 }
 
-export interface MapType<T extends SchemaType> {
+export interface RecordType<T extends SchemaType> {
   type: 'object'
   additionalProperties: T
 }
@@ -130,7 +130,7 @@ export type TypeOf<T extends SchemaType> = T extends BooleanType
   ? undefined
   : T extends ArrayType<infer U>
   ? Array<TypeOf<U>>
-  : T extends MapType<infer U>
+  : T extends RecordType<infer U>
   ? {[key: string]: TypeOf<U>}
   : T extends ObjectType<infer U>
   ? TypeOfObjectProperties<U>
@@ -159,7 +159,7 @@ export class T {
     items,
   })
 
-  static map = <T extends SchemaType>(items: T): MapType<T> => ({
+  static record = <T extends SchemaType>(items: T): RecordType<T> => ({
     type: 'object',
     additionalProperties: items,
   })
@@ -217,9 +217,9 @@ export const isUndefinedType = (value: SchemaType): value is UndefinedType => va
 export const isArrayType = (value: SchemaType): value is ArrayType<SchemaType> =>
   value.type === 'array' && !Array.isArray(value.items)
 
-export const isMapType = (value: SchemaType): value is MapType<SchemaType> =>
+export const isRecordType = (value: SchemaType): value is RecordType<SchemaType> =>
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  value.type === 'object' && (value as MapType<SchemaType>).additionalProperties !== undefined
+  value.type === 'object' && (value as RecordType<SchemaType>).additionalProperties !== undefined
 
 export const isObjectType = (value: SchemaType): value is ObjectType<ObjectProperties> => value.type === 'object'
 
@@ -398,7 +398,7 @@ export function asCode(schema: SchemaType): string {
     return `[${schema.items.map((item) => asCode(item)).join(', ')}]`
   }
 
-  if (isMapType(schema)) {
+  if (isRecordType(schema)) {
     return `Record<string, ${asCode(schema.additionalProperties)}>`
   }
 
