@@ -60,3 +60,18 @@ Not yet implemented:
 ### `validateOrThrow`
 
 ### `asCode`
+
+## Credits
+
+This library was inspired by several other TypeScript runtime type libraries:
+
+- [typebox](https://github.com/sinclairzx81/typebox)
+- [io-ts](https://github.com/gcanti/io-ts)
+- [zod](https://github.com/vriad/zod)
+- [runtypes](https://github.com/pelotom/runtypes)
+- [@punchcard/shape](https://github.com/punchcard/punchcard/tree/master/packages/%40punchcard/shape)
+- [ajv](https://github.com/ajv-validator/ajv)
+
+## License
+
+MIT license, see `LICENSE`
