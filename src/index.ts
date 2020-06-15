@@ -30,9 +30,8 @@ type ReadonlyPropertyKeys<T extends ObjectProperties> = {
 type RequiredPropertyKeys<T extends ObjectProperties> = Exclude<keyof T, OptionalPropertyKeys<T>>
 type MutablePropertyKeys<T extends ObjectProperties> = Exclude<keyof T, ReadonlyPropertyKeys<T>>
 
-// Type Options
+// Validation Options
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface NumberOptions {
   multipleOf?: number
   maximum?: number
