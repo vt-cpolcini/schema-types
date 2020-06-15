@@ -13,9 +13,9 @@ export function keysOf<T>(value: T): StringKeyOf<T>[] {
 const OPTIONAL = Symbol('@@optional@@')
 const READONLY = Symbol('@@readonly@@')
 
-type OptionalType<T extends SchemaType> = T & {[OPTIONAL]: true}
-type ReadonlyType<T extends SchemaType> = T & {[READONLY]: true}
-type ModifiedType<T extends SchemaType> = T & {
+type OptionalType<T extends AllType> = T & {[OPTIONAL]: true}
+type ReadonlyType<T extends AllType> = T & {[READONLY]: true}
+type ModifiedType<T extends AllType> = T & {
   [OPTIONAL]?: true
   [READONLY]?: true
 }
@@ -47,6 +47,8 @@ interface StringOptions {
 }
 
 // Schema Types
+
+type AllType = SchemaType | UnionType<AllType[]> | IntersectionType
 
 export type SchemaType =
   | BooleanType
@@ -81,31 +83,39 @@ export interface UndefinedType {
   type: 'undefined'
 }
 
-export interface ArrayType<T extends SchemaType> {
+export interface ArrayType<T extends AllType> {
   type: 'array'
   items: T
 }
 
-export interface RecordType<T extends SchemaType> {
+export interface RecordType<T extends AllType> {
   type: 'object'
   additionalProperties: T
 }
 
-export interface TupleType<T extends SchemaType[]> {
+export interface TupleType<T extends AllType[]> {
   type: 'array'
   items: T
 }
 
-export interface UnionType<T extends SchemaType[] = SchemaType[]> {
+export type CompositeType = UnionType | IntersectionType
+
+export interface UnionType<T extends AllType[] = AllType[]> {
   oneOf: T
+}
+
+export interface IntersectionType<Left extends AllType = AllType, Right extends AllType = AllType> {
+  allOf: [Left, Right]
 }
 
 export type ObjectProperties = {
   [key: string]:
     | SchemaType
-    | OptionalType<SchemaType>
-    | ReadonlyType<SchemaType>
-    | OptionalType<ReadonlyType<SchemaType>>
+    | UnionType
+    | IntersectionType
+    | OptionalType<AllType>
+    | ReadonlyType<AllType>
+    | OptionalType<ReadonlyType<AllType>>
 }
 
 export interface ObjectType<T extends ObjectProperties> {
@@ -129,11 +139,16 @@ export type TypeOfObjectProperties<T extends ObjectProperties> = {
     readonly [K in Extract<OptionalPropertyKeys<T>, ReadonlyPropertyKeys<T>>]?: TypeOf<T[K]>
   }
 
-type TypeOfTuple<T extends SchemaType[]> = {
-  [K in keyof T]: T[K] extends SchemaType ? TypeOf<T[K]> : never
+type TypeOfTuple<T extends AllType[]> = {
+  [K in keyof T]: T[K] extends AllType ? TypeOf<T[K]> : never
 }
 
-export type TypeOf<T extends SchemaType | UnionType> = T extends BooleanType
+type TypeOfIntersection<T extends IntersectionType> = T extends IntersectionType<infer Left, infer Right>
+  ? {0: TypeOf<Left>; 1: never}[Left extends AllType ? 0 : 1] &
+      {0: TypeOf<Right>; 1: never}[Right extends AllType ? 0 : 1]
+  : never
+
+export type TypeOf<T extends AllType> = T extends BooleanType
   ? boolean
   : T extends NullType
   ? null
@@ -153,6 +168,8 @@ export type TypeOf<T extends SchemaType | UnionType> = T extends BooleanType
   ? TypeOfTuple<U>
   : T extends UnionType<infer U>
   ? TypeOfTuple<U>[number]
+  : T extends IntersectionType
+  ? TypeOfIntersection<T>
   : never
 
 // Schema Builders
@@ -184,7 +201,7 @@ export class T {
 
   static object = <T extends ObjectProperties>(properties: T): ObjectType<T> => {
     const required = keysOf(properties).filter((key) => {
-      const prop: ModifiedType<SchemaType> = properties[key]
+      const prop: ModifiedType<AllType> = properties[key]
       return !prop[OPTIONAL]
     })
     return {
@@ -201,6 +218,13 @@ export class T {
 
   static union = <T extends SchemaType[]>(...items: T): UnionType<T> => ({
     oneOf: items,
+  })
+
+  static intersection = <Left extends AllType, Right extends AllType>(
+    left: Left,
+    right: Right,
+  ): IntersectionType<Left, Right> => ({
+    allOf: [left, right],
   })
 
   // Modifiers
@@ -248,7 +272,7 @@ export const isObjectType = (value: SchemaType): value is ObjectType<ObjectPrope
 export const isTupleType = (value: SchemaType): value is TupleType<SchemaType[]> =>
   value.type === 'array' && Array.isArray(value.items)
 
-export const isUnionType = (value: unknown): value is UnionType => {
+export const isUnionType = (value: unknown): value is UnionType<AllType[]> => {
   if (typeof value !== 'object' || value == null) {
     return false
   }
@@ -258,17 +282,64 @@ export const isUnionType = (value: unknown): value is UnionType => {
     return false
   }
 
-  return (value as UnionType).oneOf.every((item) => isSchemaType(item))
+  return (value as UnionType<AllType[]>).oneOf.every((item) => isSchemaType(item))
 }
 
-export const isOptional = <T extends SchemaType>(value: T): value is OptionalType<T> => {
+export const isIntersectionType = (value: unknown): value is IntersectionType => {
+  if (typeof value !== 'object' || value == null) {
+    return false
+  }
+
+  const keys = Object.keys(value)
+  if (keys.length !== 1 || keys[0] !== 'allOf') {
+    return false
+  }
+
+  return (value as IntersectionType).allOf.every((item) => isSchemaType(item))
+}
+
+export const isOptional = <T extends AllType>(value: T): value is OptionalType<T> => {
   const type = value as ModifiedType<T>
   return type[OPTIONAL] === true
 }
 
-export const isReadonly = <T extends SchemaType>(value: T): value is ReadonlyType<T> => {
+export const isReadonly = <T extends AllType>(value: T): value is ReadonlyType<T> => {
   const type = value as ModifiedType<T>
   return type[READONLY] === true
+}
+
+/** Merge object types (intersection) */
+function mergeIntersectionTypes(items: AllType[]): AllType[] {
+  const objectTypes = items.filter(
+    (item): item is ObjectType<ObjectProperties> => isSchemaType(item) && isObjectType(item),
+  )
+  const otherTypes = items.filter((item) => !isSchemaType(item) || !isObjectType(item))
+
+  if (objectTypes.length === 0) {
+    return items
+  }
+
+  const mergedObjectType: ObjectType<ObjectProperties> = {type: 'object', properties: {}, required: []}
+  for (const objectType of objectTypes) {
+    const keys = Object.keys(objectType.properties)
+    for (const key of keys) {
+      if (mergedObjectType.properties[key] === undefined) {
+        mergedObjectType.properties[key] = objectType.properties[key]
+      } else {
+        mergedObjectType.properties[key] = T.intersection(mergedObjectType.properties[key], objectType.properties[key])
+      }
+    }
+
+    const mergedRequired = mergedObjectType.required ?? []
+    for (const required of objectType.required ?? []) {
+      if (!mergedRequired.includes(required)) {
+        mergedRequired.push(required)
+      }
+    }
+    mergedObjectType.required = mergedRequired
+  }
+
+  return [mergedObjectType, ...otherTypes]
 }
 
 export type ValidationIssue =
@@ -290,11 +361,7 @@ const invalidTypeIssue = (expected: string, value: unknown, path: string): Valid
   path,
 })
 
-function validateWithPath<T extends SchemaType | UnionType>(
-  path: string,
-  schema: T,
-  value: unknown,
-): ValidationIssue[] {
+function validateWithPath<T extends AllType>(path: string, schema: T, value: unknown): ValidationIssue[] {
   if (isUnionType(schema)) {
     const candidateIssues: ValidationIssue[][] = []
     for (const candidateSchema of schema.oneOf) {
@@ -312,6 +379,11 @@ function validateWithPath<T extends SchemaType | UnionType>(
         candidateIssues,
       },
     ]
+  }
+
+  if (isIntersectionType(schema)) {
+    const simplifiedIntersectionTypes = mergeIntersectionTypes(schema.allOf)
+    return simplifiedIntersectionTypes.flatMap((item) => validateWithPath(path, item, value))
   }
 
   if (!isSchemaType(schema)) {
@@ -482,28 +554,29 @@ export function formatIssues(issues: ValidationIssue[]): string {
   return issues.map((issue) => `${issue.message} (at ${issue.path})`).join('\n')
 }
 
-export function validate<T extends SchemaType | UnionType>(schema: T, value: unknown): ValidationIssue[] {
+export function validate<T extends AllType>(schema: T, value: unknown): ValidationIssue[] {
   return validateWithPath('', schema, value)
 }
 
-export function validateOrThrow<T extends SchemaType | UnionType>(
-  schema: T,
-  value: unknown,
-): asserts value is TypeOf<T> {
+export function validateOrThrow<T extends AllType>(schema: T, value: unknown): asserts value is TypeOf<T> {
   const issues = validate(schema, value)
   if (issues.length > 0) {
     throw new TypeError(formatIssues(issues))
   }
 }
 
-export function is<T extends SchemaType | UnionType>(schema: T, value: unknown): value is TypeOf<T> {
+export function is<T extends AllType>(schema: T, value: unknown): value is TypeOf<T> {
   const issues = validate(schema, value)
   return issues.length === 0
 }
 
-export function asCode(schema: SchemaType | UnionType): string {
+export function asCode(schema: AllType): string {
   if (isUnionType(schema)) {
     return schema.oneOf.map((candidate) => asCode(candidate)).join(' | ')
+  }
+
+  if (isIntersectionType(schema)) {
+    return schema.allOf.map((candidate) => asCode(candidate)).join(' & ')
   }
 
   if (!isSchemaType(schema)) {
