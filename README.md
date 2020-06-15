@@ -39,13 +39,13 @@ Not yet implemented:
 
 | TypeScript   | schema-types    |
 | ------------ | --------------- |
-| `any`        | Not Implemented |
+| `any`        | `T.any()`       |
 | `unknown`    | Not Implemented |
 | `void`       | Not Implemented |
 | Enums        | Not Implemented |
 | Function     | Not Implemented |
 | Literals     | Not Implemented |
-| Union        | Not Implemented |
+| Union        | `T.union()`     |
 | Intersection | Not Implemented |
 | Generics     | Not Implemented |
 

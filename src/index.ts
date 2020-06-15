@@ -96,6 +96,10 @@ export interface TupleType<T extends SchemaType[]> {
   items: T
 }
 
+export interface UnionType<T extends SchemaType[] = SchemaType[]> {
+  oneOf: T
+}
+
 export type ObjectProperties = {
   [key: string]:
     | SchemaType
@@ -129,7 +133,7 @@ type TypeOfTuple<T extends SchemaType[]> = {
   [K in keyof T]: T[K] extends SchemaType ? TypeOf<T[K]> : never
 }
 
-export type TypeOf<T extends SchemaType> = T extends BooleanType
+export type TypeOf<T extends SchemaType | UnionType> = T extends BooleanType
   ? boolean
   : T extends NullType
   ? null
@@ -147,6 +151,8 @@ export type TypeOf<T extends SchemaType> = T extends BooleanType
   ? TypeOfObjectProperties<U>
   : T extends TupleType<infer U>
   ? TypeOfTuple<U>
+  : T extends UnionType<infer U>
+  ? TypeOfTuple<U>[number]
   : never
 
 // Schema Builders
@@ -191,6 +197,10 @@ export class T {
   static tuple = <T extends SchemaType[]>(...items: T): TupleType<T> => ({
     type: 'array',
     items,
+  })
+
+  static union = <T extends SchemaType[]>(...items: T): UnionType<T> => ({
+    oneOf: items,
   })
 
   // Modifiers
@@ -238,6 +248,19 @@ export const isObjectType = (value: SchemaType): value is ObjectType<ObjectPrope
 export const isTupleType = (value: SchemaType): value is TupleType<SchemaType[]> =>
   value.type === 'array' && Array.isArray(value.items)
 
+export const isUnionType = (value: unknown): value is UnionType => {
+  if (typeof value !== 'object' || value == null) {
+    return false
+  }
+
+  const keys = Object.keys(value)
+  if (keys.length !== 1 || keys[0] !== 'oneOf') {
+    return false
+  }
+
+  return (value as UnionType).oneOf.every((item) => isSchemaType(item))
+}
+
 export const isOptional = <T extends SchemaType>(value: T): value is OptionalType<T> => {
   const type = value as ModifiedType<T>
   return type[OPTIONAL] === true
@@ -248,19 +271,49 @@ export const isReadonly = <T extends SchemaType>(value: T): value is ReadonlyTyp
   return type[READONLY] === true
 }
 
-export type ValidationIssue = {
-  type: 'INVALID_SCHEMA' | 'INVALID_TYPE' | 'INVALID_VALUE'
-  message: string
-  path: string
-}
+export type ValidationIssue =
+  | {
+      type: 'INVALID_SCHEMA' | 'INVALID_TYPE' | 'INVALID_VALUE'
+      message: string
+      path: string
+    }
+  | {
+      type: 'NO_UNION_TYPE_MATCH'
+      message: string
+      path: string
+      candidateIssues: ValidationIssue[][]
+    }
 
 const invalidTypeIssue = (expected: string, value: unknown, path: string): ValidationIssue => ({
   type: 'INVALID_TYPE',
-  message: `Invalid type, expected ${expected}, got ${inspect(value)}`,
+  message: `Invalid type, expected ${expected}, got ${typeof value} ${inspect(value)}`,
   path,
 })
 
-function validateWithPath<T extends SchemaType>(path: string, schema: T, value: unknown): ValidationIssue[] {
+function validateWithPath<T extends SchemaType | UnionType>(
+  path: string,
+  schema: T,
+  value: unknown,
+): ValidationIssue[] {
+  if (isUnionType(schema)) {
+    const candidateIssues: ValidationIssue[][] = []
+    for (const candidateSchema of schema.oneOf) {
+      const issues = validateWithPath(path, candidateSchema, value)
+      if (issues.length === 0) {
+        return []
+      }
+      candidateIssues.push(issues)
+    }
+    return [
+      {
+        type: 'NO_UNION_TYPE_MATCH',
+        message: `Value did not match any union type candidates`,
+        path,
+        candidateIssues,
+      },
+    ]
+  }
+
   if (!isSchemaType(schema)) {
     return [{type: 'INVALID_SCHEMA', message: 'Invalid schema', path}]
   }
@@ -341,7 +394,7 @@ function validateWithPath<T extends SchemaType>(path: string, schema: T, value: 
       if (!regexp.test(value)) {
         issues.push({
           type: 'INVALID_VALUE',
-          message: `String value must match pattern: ${schema.pattern}`,
+          message: `String value ${JSON.stringify(value)} must match pattern: ${schema.pattern}`,
           path,
         })
       }
@@ -429,23 +482,30 @@ export function formatIssues(issues: ValidationIssue[]): string {
   return issues.map((issue) => `${issue.message} (at ${issue.path})`).join('\n')
 }
 
-export function validate<T extends SchemaType>(schema: T, value: unknown): ValidationIssue[] {
+export function validate<T extends SchemaType | UnionType>(schema: T, value: unknown): ValidationIssue[] {
   return validateWithPath('', schema, value)
 }
 
-export function validateOrThrow<T extends SchemaType>(schema: T, value: unknown): asserts value is TypeOf<T> {
+export function validateOrThrow<T extends SchemaType | UnionType>(
+  schema: T,
+  value: unknown,
+): asserts value is TypeOf<T> {
   const issues = validate(schema, value)
   if (issues.length > 0) {
     throw new TypeError(formatIssues(issues))
   }
 }
 
-export function is<T extends SchemaType>(schema: T, value: unknown): value is TypeOf<T> {
+export function is<T extends SchemaType | UnionType>(schema: T, value: unknown): value is TypeOf<T> {
   const issues = validate(schema, value)
   return issues.length === 0
 }
 
-export function asCode(schema: SchemaType): string {
+export function asCode(schema: SchemaType | UnionType): string {
+  if (isUnionType(schema)) {
+    return schema.oneOf.map((candidate) => asCode(candidate)).join(' | ')
+  }
+
   if (!isSchemaType(schema)) {
     throw new Error('Invalid schema')
   }
