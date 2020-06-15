@@ -33,9 +33,19 @@ type MutablePropertyKeys<T extends ObjectProperties> = Exclude<keyof T, Readonly
 // Type Options
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface NumberOptions {}
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface StringOptions {}
+interface NumberOptions {
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  minimum?: number
+  exclusiveMinimum?: number
+}
+
+interface StringOptions {
+  maxLength?: number
+  minLength?: number
+  pattern?: string
+}
 
 // Schema Types
 
@@ -49,6 +59,8 @@ export type SchemaType =
   | RecordType<SchemaType>
   | ObjectType<any>
   | TupleType<SchemaType[]>
+
+export interface AnyType {}
 
 export interface BooleanType {
   type: 'boolean'
@@ -142,6 +154,7 @@ export type TypeOf<T extends SchemaType> = T extends BooleanType
 
 export class T {
   // Types
+  static any = (): AnyType => ({})
   static boolean = (): BooleanType => ({type: 'boolean'})
   static null = (): NullType => ({type: 'null'})
   static number = (options: NumberOptions = {}): NumberType => ({
@@ -237,7 +250,7 @@ export const isReadonly = <T extends SchemaType>(value: T): value is ReadonlyTyp
 }
 
 export type ValidationIssue = {
-  type: 'INVALID_SCHEMA' | 'INVALID_TYPE'
+  type: 'INVALID_SCHEMA' | 'INVALID_TYPE' | 'INVALID_VALUE'
   message: string
   path: string
 }
@@ -262,11 +275,79 @@ function validateWithPath<T extends SchemaType>(path: string, schema: T, value: 
   }
 
   if (isNumberType(schema)) {
-    return typeof value === 'number' ? [] : [invalidTypeIssue('number', value, path)]
+    if (typeof value !== 'number') {
+      return [invalidTypeIssue('number', value, path)]
+    }
+    const issues: ValidationIssue[] = []
+    if (schema.multipleOf !== undefined && value % schema.multipleOf !== 0) {
+      issues.push({
+        type: 'INVALID_VALUE',
+        message: `Value must be a multiple of ${schema.multipleOf}`,
+        path,
+      })
+    }
+    if (schema.maximum !== undefined && value > schema.maximum) {
+      issues.push({
+        type: 'INVALID_VALUE',
+        message: `Value must be less than or equal to ${schema.maximum}, instead was ${value}`,
+        path,
+      })
+    }
+    if (schema.exclusiveMaximum !== undefined && value >= schema.exclusiveMaximum) {
+      issues.push({
+        type: 'INVALID_VALUE',
+        message: `Value must be strictly less than ${schema.exclusiveMaximum}, instead was ${value}`,
+        path,
+      })
+    }
+    if (schema.minimum !== undefined && value < schema.minimum) {
+      issues.push({
+        type: 'INVALID_VALUE',
+        message: `Value must be greater than or equal to ${schema.minimum}, instead was ${value}`,
+        path,
+      })
+    }
+    if (schema.exclusiveMinimum !== undefined && value <= schema.exclusiveMinimum) {
+      issues.push({
+        type: 'INVALID_VALUE',
+        message: `Value must be strictly greater than ${schema.exclusiveMinimum}, instead was ${value}`,
+        path,
+      })
+    }
+    return issues
   }
 
   if (isStringType(schema)) {
-    return typeof value === 'string' ? [] : [invalidTypeIssue('string', value, path)]
+    if (typeof value !== 'string') {
+      return [invalidTypeIssue('string', value, path)]
+    }
+    const issues: ValidationIssue[] = []
+    const length = value.length
+    if (schema.maxLength !== undefined && length > schema.maxLength) {
+      issues.push({
+        type: 'INVALID_VALUE',
+        message: `String value must have a length no greater than ${schema.maxLength}, instead was ${length}`,
+        path,
+      })
+    }
+    if (schema.minLength !== undefined && length < schema.minLength) {
+      issues.push({
+        type: 'INVALID_VALUE',
+        message: `String value must have a length no less than ${schema.minLength}, instead was ${length}`,
+        path,
+      })
+    }
+    if (schema.pattern !== undefined) {
+      const regexp = new RegExp(schema.pattern)
+      if (!regexp.test(value)) {
+        issues.push({
+          type: 'INVALID_VALUE',
+          message: `String value must match pattern: ${schema.pattern}`,
+          path,
+        })
+      }
+    }
+    return issues
   }
 
   if (isUndefinedType(schema)) {
