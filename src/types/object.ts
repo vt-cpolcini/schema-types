@@ -1,8 +1,9 @@
 import {invalidTypeIssue, pathToString, _validate, ValidationIssue} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
 import {isOptionalType, OptionalType} from '../modifiers/optional'
-import {ReadonlyType} from '../modifiers/readonly'
+import {ReadonlyType, isReadonlyType} from '../modifiers/readonly'
 import {ReadonlyOptionalType} from '../modifiers/readonlyOptional'
+import {_code} from '../helpers/code'
 
 // type TypeFromSchema<T> = T extends {
 //   type: 'object'
@@ -112,4 +113,19 @@ export const validate = <T extends ObjectProperties>(
   )
 
   return issues
+}
+
+export const code = <T extends ObjectProperties>(schema: ObjectType<T>): string => {
+  const props: string[] = []
+
+  for (const prop of Object.keys(schema.properties) as (keyof T)[]) {
+    const propSchema = schema.properties[prop]
+
+    const isOptional = isOptionalType(propSchema)
+    const isReadonly = isReadonlyType(propSchema)
+
+    props.push(`${isReadonly ? 'readonly ' : ''}"${prop}"${isOptional ? '?' : ''}: ${_code(propSchema)}`)
+  }
+
+  return `{${props.join('; ')}}`
 }

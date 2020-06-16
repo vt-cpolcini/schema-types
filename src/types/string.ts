@@ -54,3 +54,5 @@ export const validate = (schema: StringType, value: unknown, path: string[]): Va
 
   return issues
 }
+
+export const code = (_schema: StringType): string => 'string'

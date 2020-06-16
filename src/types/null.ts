@@ -12,3 +12,5 @@ export const isNullType = (value: SchemaType<unknown>): value is NullType => val
 
 export const validate = (_schema: NullType, value: unknown, path: string[]): ValidationIssue[] =>
   value === null ? [] : [invalidTypeIssue('null', value, path)]
+
+export const code = (_schema: NullType): string => 'null'

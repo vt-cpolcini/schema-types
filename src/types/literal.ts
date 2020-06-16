@@ -1,9 +1,9 @@
-import {invalidTypeIssue, ValidationIssue, pathToString} from '../helpers/validate'
+import {invalidTypeIssue, pathToString, ValidationIssue} from '../helpers/validate'
 import {SchemaType, withTypeSymbol} from './base'
 
-type PrimitiveType = bigint | boolean | null | number | string | undefined
+export type PrimitiveType = bigint | boolean | null | number | string | undefined
 
-type InferredLiteralType<U extends PrimitiveType = PrimitiveType> =
+export type InferredLiteralType<U extends PrimitiveType = PrimitiveType> =
   | U
   | {[name: string]: InferredLiteralType<U>}
   | []
@@ -101,3 +101,5 @@ export const validate = <T extends InferredLiteralType>(
   value: unknown,
   path: string[],
 ): ValidationIssue[] => equalsLiteral(schema.value, value, path)
+
+export const code = <T extends InferredLiteralType>(schema: LiteralType<T>): string => JSON.stringify(schema.value)

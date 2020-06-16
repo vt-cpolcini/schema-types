@@ -11,3 +11,5 @@ export const isBooleanType = (value: SchemaType<unknown>): value is BooleanType 
 
 export const validate = (_schema: BooleanType, value: unknown, path: string[]): ValidationIssue[] =>
   typeof value === 'boolean' ? [] : [invalidTypeIssue('boolean', value, path)]
+
+export const code = (_schema: BooleanType): string => 'boolean'

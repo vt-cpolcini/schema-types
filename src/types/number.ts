@@ -67,3 +67,5 @@ export const validate = (schema: NumberType, value: unknown, path: string[]): Va
 
   return issues
 }
+
+export const code = (_schema: NumberType): string => 'number'

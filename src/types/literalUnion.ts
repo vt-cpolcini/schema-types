@@ -1,29 +1,21 @@
 import {pathToString, ValidationIssue} from '../helpers/validate'
 import {SchemaType, withTypeSymbol} from './base'
-import {equalsLiteral} from './literal'
+import {equalsLiteral, InferredLiteralType, PrimitiveType} from './literal'
 
-type PrimitiveType = bigint | boolean | null | number | string | undefined
-
-type InferLiteralType<U extends PrimitiveType = PrimitiveType> =
-  | U
-  | {[name: string]: InferLiteralType<U>}
-  | []
-  | [InferLiteralType<U>]
-  | [InferLiteralType<U>, ...InferLiteralType<U>[]]
-
-export interface LiteralUnionType<T extends any[]> extends SchemaType<T[number]> {
+export interface LiteralUnionType<T extends InferredLiteralType[]> extends SchemaType<T[number]> {
   type: 'literalUnion'
   values: T
 }
 
-export const literalUnion = <U extends PrimitiveType, T extends InferLiteralType<U>[]>(
+export const literalUnion = <U extends PrimitiveType, T extends InferredLiteralType<U>[]>(
   ...values: T
 ): LiteralUnionType<T> => withTypeSymbol({type: 'literalUnion', values} as const)
 
-export const isLiteralUnionType = <T extends any[]>(value: SchemaType<unknown>): value is LiteralUnionType<T> =>
-  value.type === 'literalUnion'
+export const isLiteralUnionType = <T extends InferredLiteralType[]>(
+  value: SchemaType<unknown>,
+): value is LiteralUnionType<T> => value.type === 'literalUnion'
 
-export const validate = <T extends any[]>(
+export const validate = <T extends InferredLiteralType[]>(
   schema: LiteralUnionType<T>,
   value: unknown,
   path: string[],
@@ -47,3 +39,6 @@ export const validate = <T extends any[]>(
     },
   ]
 }
+
+export const code = <T extends InferredLiteralType[]>(schema: LiteralUnionType<T>): string =>
+  `(${schema.values.map((value) => JSON.stringify(value)).join(' | ')})`

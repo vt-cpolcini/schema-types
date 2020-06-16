@@ -13,3 +13,5 @@ export const isVoidType = (value: SchemaType<unknown>): value is VoidType => val
 export const validate = (_schema: VoidType, value: unknown, path: string[]): ValidationIssue[] => [
   {type: 'INVALID_VALUE', message: `Expected void, instead got ${value}`, path: pathToString(path)},
 ]
+
+export const code = (_schema: VoidType): string => 'void'

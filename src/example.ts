@@ -28,3 +28,5 @@ console.log(
     prop4: () => 123,
   }),
 )
+
+console.log(T.code(test))

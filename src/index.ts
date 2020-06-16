@@ -1,5 +1,6 @@
 // Helpers
 export {assert} from './helpers/assert'
+export {code} from './helpers/code'
 export {is} from './helpers/is'
 export {validate} from './helpers/validate'
 

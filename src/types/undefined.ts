@@ -11,3 +11,5 @@ export const isUndefinedType = (value: SchemaType<unknown>): value is UndefinedT
 
 export const validate = (_schema: UndefinedType, value: unknown, path: string[]): ValidationIssue[] =>
   typeof value === 'undefined' ? [] : [invalidTypeIssue('undefined', value, path)]
+
+export const code = (_schema: UndefinedType): string => 'undefined'

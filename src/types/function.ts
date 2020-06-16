@@ -1,3 +1,4 @@
+import {_code} from '../helpers/code'
 import {invalidTypeIssue, ValidationIssue} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
 
@@ -38,3 +39,19 @@ export const validate = <Args extends SchemaType[]>(
   value: unknown,
   path: string[],
 ): ValidationIssue[] => (typeof value === 'function' ? [] : [invalidTypeIssue('function', value, path)])
+
+export const code = <Args extends SchemaType[]>(schema: FunctionType<Args>): string => {
+  if (schema.args.length === 0) {
+    throw new Error('Not enough arguments')
+  }
+
+  if (schema.args.length === 1) {
+    return `() => ${_code(schema.args[0])}`
+  }
+
+  const argTypes = schema.args.slice(0, schema.args.length - 1)
+  const args = argTypes.map((arg, idx) => `arg_${idx}: ${_code(arg)}`)
+  const returnType = schema.args[schema.args.length - 1]
+
+  return `(${args.join(', ')}) => ${_code(returnType)}`
+}

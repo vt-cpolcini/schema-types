@@ -1,4 +1,5 @@
-import {_validate, ValidationIssue} from '../helpers/validate'
+import {_code} from '../helpers/code'
+import {ValidationIssue, _validate} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
 import {isObjectType, ObjectProperties, ObjectType} from './object'
 
@@ -44,3 +45,7 @@ export const validate = <Left extends SchemaType, Right extends SchemaType>(
   path: string[],
 ): ValidationIssue[] =>
   mergeIntersectionTypes(schema.left, schema.right).flatMap((candidate) => _validate(candidate, value, path))
+
+export const code = <Left extends SchemaType, Right extends SchemaType>(
+  schema: IntersectionType<Left, Right>,
+): string => `(${_code(schema.left)} & ${schema.right})`

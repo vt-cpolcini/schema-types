@@ -1,4 +1,5 @@
-import {pathToString, _validate, ValidationIssue, invalidTypeIssue} from '../helpers/validate'
+import {_code} from '../helpers/code'
+import {invalidTypeIssue, pathToString, ValidationIssue, _validate} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
 
 type TypeOfTuple<T extends SchemaType[]> = {
@@ -42,3 +43,6 @@ export const validate = <T extends SchemaType[]>(
 
   return issues
 }
+
+export const code = <T extends SchemaType[]>(schema: TupleType<T>): string =>
+  `[${schema.items.map((item) => _code(item)).join(', ')}]`

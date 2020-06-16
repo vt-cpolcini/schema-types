@@ -1,4 +1,5 @@
-import {_validate, ValidationIssue} from '../helpers/validate'
+import {_code} from '../helpers/code'
+import {ValidationIssue, _validate} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from '../types/base'
 import {isModifiedType, ModifiedType} from './modified'
 import {isReadonlyType, ReadonlyType} from './readonly'
@@ -35,3 +36,5 @@ export const validate = <T extends SchemaType>(
   value: unknown,
   path: string[],
 ): ValidationIssue[] => (value === undefined ? [] : _validate(schema.item, value, path))
+
+export const code = <T extends SchemaType>(schema: OptionalType<T>): string => `(${_code(schema.item)} | undefined)`

@@ -1,4 +1,5 @@
-import {pathToString, _validate, ValidationIssue} from '../helpers/validate'
+import {_code} from '../helpers/code'
+import {pathToString, ValidationIssue, _validate} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
 
 type TypeOfUnion<T extends SchemaType[]> = {
@@ -40,3 +41,6 @@ export const validate = <T extends SchemaType[]>(
     },
   ]
 }
+
+export const code = <T extends SchemaType[]>(schema: UnionType<T>): string =>
+  `(${schema.oneOf.map((item) => _code(item)).join(' | ')})`

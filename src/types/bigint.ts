@@ -11,3 +11,5 @@ export const isBigintType = (value: SchemaType<unknown>): value is BigintType =>
 
 export const validate = (_schema: BigintType, value: unknown, path: string[]): ValidationIssue[] =>
   typeof value === 'bigint' ? [] : [invalidTypeIssue('bigint', value, path)]
+
+export const code = (_schema: BigintType): string => 'bigint'

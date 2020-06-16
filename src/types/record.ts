@@ -1,4 +1,5 @@
-import {invalidTypeIssue, _validate, ValidationIssue} from '../helpers/validate'
+import {_code} from '../helpers/code'
+import {invalidTypeIssue, ValidationIssue, _validate} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
 
 export interface RecordType<T extends SchemaType> extends SchemaType<Record<string, TypeOf<T>>> {
@@ -24,3 +25,6 @@ export const validate = <T extends SchemaType>(
     _validate(schema.additionalProperties, (value as Record<string, unknown>)[key], [...path, key]),
   )
 }
+
+export const code = <T extends SchemaType>(schema: RecordType<T>): string =>
+  `Record<string, ${_code(schema.additionalProperties)}>`

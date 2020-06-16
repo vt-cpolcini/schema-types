@@ -1,4 +1,5 @@
-import {invalidTypeIssue, _validate, ValidationIssue} from '../helpers/validate'
+import {_code} from '../helpers/code'
+import {invalidTypeIssue, ValidationIssue, _validate} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
 
 export interface ArrayType<T extends SchemaType> extends SchemaType<TypeOf<T>[]> {
@@ -22,3 +23,5 @@ export const validate = <T extends SchemaType>(
 
   return value.flatMap((item, idx) => _validate(schema.items, item, [...path, idx.toString()]))
 }
+
+export const code = <T extends SchemaType>(schema: ArrayType<T>): string => `Array<${_code(schema.items)}>`
