@@ -16,26 +16,26 @@ This library provides runtime and compile-type type schema definition and valida
 
 Implemented types:
 
-| TypeScript          | schema-types        |
-| ------------------- | ------------------- |
-| `any`               | `T.any()`           |
-| `Array`             | `T.array()`         |
-| `bigint`            | `T.bigint()`        |
-| `boolean`           | `T.boolean()`       |
-| `Function`          | `T.function()`      |
-| `null`              | `T.null()`          |
-| `number`            | `T.number()`        |
-| `object`            | `T.object()`        |
-| `Record<string, T>` | `T.map()`           |
-| `string`            | `T.string()`        |
-| `Tuple`             | `T.tuple()`         |
-| `undefined`         | `T.undefined()`     |
-| `unknown`           | `T.unknown()`       |
-| `void`              | `T.void()`          |
-| Literals            | `T.literal()`       |
-| Union               | `T.union()`         |
-| Literal Union       | `T.literalUnion()`  |
-| Intersection        | `T.intersection()`` |
+| TypeScript          | schema-types       |
+| ------------------- | ------------------ |
+| `any`               | `T.any()`          |
+| `Array`             | `T.array()`        |
+| `bigint`            | `T.bigint()`       |
+| `boolean`           | `T.boolean()`      |
+| `Function`          | `T.function()`     |
+| `null`              | `T.null()`         |
+| `number`            | `T.number()`       |
+| `object`            | `T.object()`       |
+| `Record<string, T>` | `T.map()`          |
+| `string`            | `T.string()`       |
+| `Tuple`             | `T.tuple()`        |
+| `undefined`         | `T.undefined()`    |
+| `unknown`           | `T.unknown()`      |
+| `void`              | `T.void()`         |
+| Literals            | `T.literal()`      |
+| Union               | `T.union()`        |
+| Literal Union       | `T.literalUnion()` |
+| Intersection        | `T.intersection()` |
 
 Implemented modifiers:
 
