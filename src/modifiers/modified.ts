@@ -1,4 +1,4 @@
-import {SchemaType, TypeOf} from './base'
+import {SchemaType, TypeOf} from '../types/base'
 
 export interface ModifiedType<T extends SchemaType, U = TypeOf<T>> extends SchemaType<U> {
   type: 'modified'

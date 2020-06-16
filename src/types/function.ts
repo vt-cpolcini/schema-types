@@ -1,4 +1,5 @@
-import {SchemaType, withTypeSymbol, TypeOf} from './base'
+import {invalidTypeIssue, ValidationIssue} from '../helpers/validate'
+import {SchemaType, TypeOf, withTypeSymbol} from './base'
 
 type Tail<T extends any[]> = ((...t: T) => void) extends (h: any, ...r: infer R) => void ? R : never
 
@@ -31,3 +32,9 @@ export {functionType as function}
 
 export const isFunctionType = <Args extends SchemaType[]>(value: SchemaType<unknown>): value is FunctionType<Args> =>
   value.type === 'function'
+
+export const validate = <Args extends SchemaType[]>(
+  _schema: FunctionType<Args>,
+  value: unknown,
+  path: string[],
+): ValidationIssue[] => (typeof value === 'function' ? [] : [invalidTypeIssue('function', value, path)])

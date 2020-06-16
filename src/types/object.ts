@@ -1,7 +1,8 @@
+import {invalidTypeIssue, pathToString, _validate, ValidationIssue} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
-import {OptionalType} from './optional'
-import {ReadonlyType} from './readonly'
-import {ReadonlyOptionalType} from './readonlyOptional'
+import {isOptionalType, OptionalType} from '../modifiers/optional'
+import {ReadonlyType} from '../modifiers/readonly'
+import {ReadonlyOptionalType} from '../modifiers/readonlyOptional'
 
 // type TypeFromSchema<T> = T extends {
 //   type: 'object'
@@ -67,3 +68,48 @@ export const object = <T extends ObjectProperties>(properties: T): ObjectType<T>
 
 export const isObjectType = <T extends ObjectProperties>(value: SchemaType): value is ObjectType<T> =>
   value.type === 'object'
+
+export const validate = <T extends ObjectProperties>(
+  schema: ObjectType<T>,
+  value: unknown,
+  path: string[],
+): ValidationIssue[] => {
+  if (typeof value !== 'object' || value === null) {
+    return [invalidTypeIssue('object', value, path)]
+  }
+
+  const schemaKeys = new Set<string>(Object.keys(schema.properties))
+  const valueKeys = new Set<string>(Object.keys(value))
+
+  const extraKeys = new Set([...valueKeys].filter((key) => !schemaKeys.has(key)))
+  const requiredKeys = new Set<string>([...schemaKeys].filter((key) => isOptionalType(schema.properties[key])))
+  const missingKeys = new Set([...requiredKeys].filter((key) => !valueKeys.has(key)))
+
+  const issues: ValidationIssue[] = []
+
+  if (extraKeys.size > 0) {
+    issues.push({
+      type: 'INVALID_VALUE',
+      message: `Value provided unexpected keys: ${[...extraKeys].join(', ')}`,
+      path: pathToString(path),
+    })
+  }
+
+  if (missingKeys.size > 0) {
+    issues.push({
+      type: 'INVALID_VALUE',
+      message: `Value is missing required keys: ${[...missingKeys].join(', ')}`,
+      path: pathToString(path),
+    })
+  }
+
+  issues.push(
+    ...[...valueKeys].flatMap((key) =>
+      schemaKeys.has(key)
+        ? _validate(schema.properties[key], (value as Record<string, unknown>)[key], [...path, key])
+        : [],
+    ),
+  )
+
+  return issues
+}

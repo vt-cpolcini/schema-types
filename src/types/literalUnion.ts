@@ -1,4 +1,6 @@
+import {pathToString, ValidationIssue} from '../helpers/validate'
 import {SchemaType, withTypeSymbol} from './base'
+import {equalsLiteral} from './literal'
 
 type PrimitiveType = bigint | boolean | null | number | string | undefined
 
@@ -20,3 +22,28 @@ export const literalUnion = <U extends PrimitiveType, T extends InferLiteralType
 
 export const isLiteralUnionType = <T extends any[]>(value: SchemaType<unknown>): value is LiteralUnionType<T> =>
   value.type === 'literalUnion'
+
+export const validate = <T extends any[]>(
+  schema: LiteralUnionType<T>,
+  value: unknown,
+  path: string[],
+): ValidationIssue[] => {
+  const candidateIssues: ValidationIssue[][] = []
+
+  for (const candidate of schema.values) {
+    const issues = equalsLiteral(candidate, value, path)
+    if (issues.length === 0) {
+      return []
+    }
+    candidateIssues.push(issues)
+  }
+
+  return [
+    {
+      type: 'NO_UNION_TYPE_MATCH',
+      message: `Value did not match any union type candidates`,
+      path: pathToString(path),
+      candidateIssues,
+    },
+  ]
+}

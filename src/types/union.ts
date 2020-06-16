@@ -1,4 +1,5 @@
-import {SchemaType, withTypeSymbol, TypeOf} from './base'
+import {pathToString, _validate, ValidationIssue} from '../helpers/validate'
+import {SchemaType, TypeOf, withTypeSymbol} from './base'
 
 type TypeOfUnion<T extends SchemaType[]> = {
   [K in keyof T]: TypeOf<T[K]>
@@ -14,3 +15,28 @@ export const union = <T extends SchemaType[]>(...items: T): UnionType<T> =>
 
 export const isUnionType = <T extends SchemaType[]>(value: SchemaType<unknown>): value is UnionType<T> =>
   value.type === 'union'
+
+export const validate = <T extends SchemaType[]>(
+  schema: UnionType<T>,
+  value: unknown,
+  path: string[],
+): ValidationIssue[] => {
+  const candidateIssues: ValidationIssue[][] = []
+
+  for (const candidate of schema.oneOf) {
+    const issues = _validate(candidate, value, path)
+    if (issues.length === 0) {
+      return []
+    }
+    candidateIssues.push(issues)
+  }
+
+  return [
+    {
+      type: 'NO_UNION_TYPE_MATCH',
+      message: `Value did not match any union type candidates`,
+      path: pathToString(path),
+      candidateIssues,
+    },
+  ]
+}

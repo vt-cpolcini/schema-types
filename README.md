@@ -53,15 +53,15 @@ Not yet implemented:
 
 ## Helpers
 
-### `TypeOf`
+### `T.TypeOf<T>`
 
-### `is`
+### `T.assert()`
 
-### `validate`
+### `T.is()`
 
-### `validateOrThrow`
+### `T.validate()`
 
-### `asCode`
+### `T.code()`
 
 ## Credits
 

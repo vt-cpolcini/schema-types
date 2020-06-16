@@ -1,4 +1,4 @@
-import {SchemaType} from './base'
+import {SchemaType} from '../types/base'
 import {ModifiedType} from './modified'
 
 export interface ReadonlyOptionalType<T extends SchemaType> extends ModifiedType<T> {

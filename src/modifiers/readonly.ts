@@ -1,4 +1,5 @@
-import {SchemaType, withTypeSymbol} from './base'
+import {_validate, ValidationIssue} from '../helpers/validate'
+import {SchemaType, withTypeSymbol} from '../types/base'
 import {isModifiedType, ModifiedType} from './modified'
 import {isOptionalType, OptionalType} from './optional'
 import {ReadonlyOptionalType} from './readonlyOptional'
@@ -28,3 +29,9 @@ export const readonly = <T extends SchemaType>(item: T): ReadonlyWrapped<T> => {
 
 export const isReadonlyType = <T extends SchemaType>(value: SchemaType<unknown>): value is ReadonlyType<T> =>
   isModifiedType(value) && value.readonly === true
+
+export const validate = <T extends SchemaType>(
+  schema: ReadonlyType<T>,
+  value: unknown,
+  path: string[],
+): ValidationIssue[] => _validate(schema.item, value, path)

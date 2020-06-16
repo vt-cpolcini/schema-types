@@ -1,4 +1,5 @@
-import {SchemaType, TypeOf, withTypeSymbol} from './base'
+import {_validate, ValidationIssue} from '../helpers/validate'
+import {SchemaType, TypeOf, withTypeSymbol} from '../types/base'
 import {isModifiedType, ModifiedType} from './modified'
 import {isReadonlyType, ReadonlyType} from './readonly'
 import {ReadonlyOptionalType} from './readonlyOptional'
@@ -28,3 +29,9 @@ export const optional = <T extends SchemaType>(item: T): OptionalWrapped<T> => {
 
 export const isOptionalType = <T extends SchemaType>(value: SchemaType<unknown>): value is OptionalType<T> =>
   isModifiedType(value) && value.optional === true
+
+export const validate = <T extends SchemaType>(
+  schema: OptionalType<T>,
+  value: unknown,
+  path: string[],
+): ValidationIssue[] => (value === undefined ? [] : _validate(schema.item, value, path))

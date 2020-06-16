@@ -9,9 +9,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc",
     "clean": "rm -rf dist *.tsbuildinfo",
-    "watch": "tsc -b -w"
+    "watch": "tsc -w"
   },
   "publishConfig": {
     "access": "public"
