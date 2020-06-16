@@ -5,8 +5,10 @@ export {is} from './helpers/is'
 export {validate} from './helpers/validate'
 
 // Modifiers
+export {ModifiedType} from './modifiers/modified'
 export {optional, OptionalType} from './modifiers/optional'
 export {readonly, ReadonlyType} from './modifiers/readonly'
+export {ReadonlyOptionalType} from './modifiers/readonlyOptional'
 
 // Types
 export {any, AnyType} from './types/any'
