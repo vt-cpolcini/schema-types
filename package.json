@@ -13,6 +13,8 @@
   "scripts": {
     "build": "rollup -c",
     "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "ava",
+    "test-coverage": "nyc ava",
     "type-check": "tsc"
   },
   "publishConfig": {
@@ -20,10 +22,15 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/node": "^12",
     "@wessberg/rollup-plugin-ts": "^1.2.25",
+    "ava": "^3.9.0",
+    "nyc": "^15.1.0",
     "prettier": "^2.0.5",
     "rollup": "^2.16.1",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^8.10.2",
     "typescript": "^3.9.3"
   },
   "funding": {
@@ -43,5 +50,16 @@
     "schema",
     "json-schema",
     "types"
-  ]
+  ],
+  "ava": {
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript"
+  }
 }
