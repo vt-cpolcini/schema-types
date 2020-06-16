@@ -1,7 +1,7 @@
 import {SchemaType, withTypeSymbol, TypeOf} from './base'
 
 type TypeOfTuple<T extends SchemaType[]> = {
-  [K in keyof T]: T[K] extends SchemaType ? TypeOf<T[K]> : never
+  [K in keyof T]: TypeOf<T[K]>
 }
 
 export interface TupleType<T extends SchemaType[]> extends SchemaType<TypeOfTuple<T>> {
