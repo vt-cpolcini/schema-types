@@ -1,6 +1,7 @@
 export * from './any'
 export * from './array'
 export * from './base'
+export * from './bigint'
 export * from './boolean'
 export * from './intersection'
 export * from './literal'
