@@ -16,17 +16,26 @@ This library provides runtime and compile-type type schema definition and valida
 
 Implemented types:
 
-| TypeScript          | schema-types    |
-| ------------------- | --------------- |
-| `boolean`           | `T.boolean()`   |
-| `number`            | `T.number()`    |
-| `string`            | `T.string()`    |
-| `Array`             | `T.array()`     |
-| `Tuple`             | `T.tuple()`     |
-| `null`              | `T.null()`      |
-| `undefined`         | `T.undefined()` |
-| `object`            | `T.object()`    |
-| `Record<string, T>` | `T.map()`       |
+| TypeScript          | schema-types        |
+| ------------------- | ------------------- |
+| `any`               | `T.any()`           |
+| `Array`             | `T.array()`         |
+| `bigint`            | `T.bigint()`        |
+| `boolean`           | `T.boolean()`       |
+| `Function`          | `T.function()`      |
+| `null`              | `T.null()`          |
+| `number`            | `T.number()`        |
+| `object`            | `T.object()`        |
+| `Record<string, T>` | `T.map()`           |
+| `string`            | `T.string()`        |
+| `Tuple`             | `T.tuple()`         |
+| `undefined`         | `T.undefined()`     |
+| `unknown`           | `T.unknown()`       |
+| `void`              | `T.void()`          |
+| Literals            | `T.literal()`       |
+| Union               | `T.union()`         |
+| Literal Union       | `T.literalUnion()`  |
+| Intersection        | `T.intersection()`` |
 
 Implemented modifiers:
 
@@ -37,17 +46,10 @@ Implemented modifiers:
 
 Not yet implemented:
 
-| TypeScript   | schema-types    |
-| ------------ | --------------- |
-| `any`        | `T.any()`       |
-| `unknown`    | Not Implemented |
-| `void`       | Not Implemented |
-| Enums        | Not Implemented |
-| Function     | Not Implemented |
-| Literals     | Not Implemented |
-| Union        | `T.union()`     |
-| Intersection | Not Implemented |
-| Generics     | Not Implemented |
+| TypeScript | schema-types    |
+| ---------- | --------------- |
+| Enums      | Not Implemented |
+| Generics   | Not Implemented |
 
 ## Helpers
 
