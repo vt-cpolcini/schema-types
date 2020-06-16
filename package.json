@@ -13,8 +13,9 @@
   "scripts": {
     "build": "rollup -c",
     "clean": "rm -rf dist *.tsbuildinfo",
-    "test": "ava",
-    "test-coverage": "nyc ava",
+    "test": "env TS_NODE_PROJECT=tsconfig.test.json ava",
+    "test-coverage": "env TS_NODE_PROJECT=tsconfig.test.json nyc ava",
+    "test-type-check": "tsc -p tsconfig.test.json",
     "type-check": "tsc"
   },
   "publishConfig": {

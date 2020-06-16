@@ -1,5 +1,5 @@
 import test from 'ava'
-import * as T from '../..'
+import * as T from '..'
 
 const functionType = T.function()
 
