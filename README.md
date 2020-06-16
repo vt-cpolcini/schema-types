@@ -28,13 +28,13 @@ Implemented types:
 | `object`            | `T.object()`       |
 | `Record<string, T>` | `T.map()`          |
 | `string`            | `T.string()`       |
-| `Tuple`             | `T.tuple()`        |
 | `undefined`         | `T.undefined()`    |
 | `unknown`           | `T.unknown()`      |
 | `void`              | `T.void()`         |
 | Literals            | `T.literal()`      |
-| Union               | `T.union()`        |
 | Literal Union       | `T.literalUnion()` |
+| Tuple               | `T.tuple()`        |
+| Union               | `T.union()`        |
 | Intersection        | `T.intersection()` |
 
 Implemented modifiers:
@@ -44,7 +44,7 @@ Implemented modifiers:
 | Optional   | `T.optional()` |
 | Read-only  | `T.readonly()` |
 
-Not yet implemented:
+Not implemented:
 
 | TypeScript | schema-types    |
 | ---------- | --------------- |
@@ -55,13 +55,23 @@ Not yet implemented:
 
 ### `T.TypeOf<T>`
 
-### `T.assert()`
+Takes a type schema and infers the TypeScript type for that schema.
 
-### `T.is()`
+### `T.assert(schema, value)`
 
-### `T.validate()`
+Checks to see if the value matches the supplied schema, and if not, throws an error.
 
-### `T.code()`
+### `T.is(schema, value)`
+
+Returns a boolean indicating if the value matches the supplied schema.
+
+### `T.validate(schema, value)`
+
+Returns an array of validation issues, if any.
+
+### `T.code(schema)`
+
+Returns a string containing the TypeScript code representation of the schema, useful for code generation.
 
 ## Credits
 
