@@ -3,25 +3,27 @@
   "version": "1.1.0",
   "description": "Runtime and compile-type type schema definition and validation",
   "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "rollup -c",
     "clean": "rm -rf dist *.tsbuildinfo",
-    "watch": "tsc -w"
+    "type-check": "tsc"
   },
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "tslib": "^2.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^12",
+    "@wessberg/rollup-plugin-ts": "^1.2.25",
     "prettier": "^2.0.5",
+    "rollup": "^2.16.1",
     "typescript": "^3.9.3"
   },
   "funding": {
