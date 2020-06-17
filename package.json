@@ -28,6 +28,7 @@
     "@wessberg/rollup-plugin-ts": "^1.2.25",
     "ava": "^3.9.0",
     "ava-fast-check": "^1.1.2",
+    "expect-type": "^0.7.4",
     "fast-check": "^1.25.1",
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",

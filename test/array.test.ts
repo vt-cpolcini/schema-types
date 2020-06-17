@@ -1,8 +1,22 @@
 import test from 'ava'
 import {fc, testProp} from 'ava-fast-check'
+import {expectTypeOf} from 'expect-type'
 import * as T from '..'
 
 const arrayType = T.array(T.number())
+
+test('Infers type', (t) => {
+  const numberArray = T.array(T.number())
+  expectTypeOf<T.TypeOf<typeof numberArray>>().toEqualTypeOf<number[]>()
+
+  const stringArray = T.array(T.string())
+  expectTypeOf<T.TypeOf<typeof stringArray>>().toEqualTypeOf<string[]>()
+
+  expectTypeOf<T.TypeOf<typeof stringArray>>().not.toEqualTypeOf<number[]>()
+  expectTypeOf<T.TypeOf<typeof numberArray>>().not.toEqualTypeOf<string[]>()
+
+  t.pass()
+})
 
 test('Return no issues for array', (t) => {
   t.deepEqual(T.validate(arrayType, [123]), [])

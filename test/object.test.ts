@@ -1,7 +1,14 @@
 import test from 'ava'
+import {expectTypeOf} from 'expect-type'
 import * as T from '..'
 
 const objectType = T.object({an: T.string()})
+
+test('Infers type', (t) => {
+  expectTypeOf<T.TypeOf<typeof objectType>>().toEqualTypeOf<{an: string}>()
+
+  t.pass()
+})
 
 test('Return no issues for object', (t) => {
   t.deepEqual(T.validate(objectType, {an: 'object'}), [])
