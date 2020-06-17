@@ -1,4 +1,5 @@
 import test from 'ava'
+import {fc, testProp} from 'ava-fast-check'
 import * as T from '..'
 
 const arrayType = T.array(T.number())
@@ -22,4 +23,9 @@ test('Return issues for other types', (t) => {
 
 test('Return issues for incorrect wrapped type', (t) => {
   t.snapshot(T.validate(arrayType, ['string']))
+})
+
+testProp('Return no issues for arbitrary integer arrays', [fc.array(fc.integer())], (integerArray) => {
+  const issues = T.validate(arrayType, integerArray)
+  return issues.length === 0
 })

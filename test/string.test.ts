@@ -1,4 +1,5 @@
 import test from 'ava'
+import {fc, testProp} from 'ava-fast-check'
 import * as T from '..'
 
 const stringType = T.string()
@@ -17,4 +18,9 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(stringType, {an: 'object'}))
   // t.snapshot(T.validate(stringType, 'string'))
   t.snapshot(T.validate(stringType, undefined))
+})
+
+testProp('Return no issues for arbitrary strings', [fc.string()], (string) => {
+  const issues = T.validate(stringType, string)
+  return issues.length === 0
 })

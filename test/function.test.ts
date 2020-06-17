@@ -1,4 +1,5 @@
 import test from 'ava'
+import {fc, testProp} from 'ava-fast-check'
 import * as T from '..'
 
 const functionType = T.function()
@@ -20,4 +21,9 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(functionType, {an: 'object'}))
   t.snapshot(T.validate(functionType, 'string'))
   t.snapshot(T.validate(functionType, undefined))
+})
+
+testProp('Return no issues for arbitrary functions', [fc.func(fc.anything())], (func) => {
+  const issues = T.validate(functionType, func)
+  return issues.length === 0
 })

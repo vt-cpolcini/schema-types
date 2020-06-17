@@ -1,4 +1,5 @@
 import test from 'ava'
+import {fc, testProp} from 'ava-fast-check'
 import * as T from '..'
 
 const booleanType = T.boolean()
@@ -18,4 +19,9 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(booleanType, {an: 'object'}))
   t.snapshot(T.validate(booleanType, 'string'))
   t.snapshot(T.validate(booleanType, undefined))
+})
+
+testProp('Return no issues for arbitrary booleans', [fc.boolean()], (boolean) => {
+  const issues = T.validate(booleanType, boolean)
+  return issues.length === 0
 })

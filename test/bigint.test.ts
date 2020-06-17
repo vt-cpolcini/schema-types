@@ -1,4 +1,5 @@
 import test from 'ava'
+import {fc, testProp} from 'ava-fast-check'
 import * as T from '..'
 
 const bigintType = T.bigint()
@@ -17,4 +18,9 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(bigintType, {an: 'object'}))
   t.snapshot(T.validate(bigintType, 'string'))
   t.snapshot(T.validate(bigintType, undefined))
+})
+
+testProp('Return no issues for arbitrary bigints', [fc.bigInt()], (bigint) => {
+  const issues = T.validate(bigintType, bigint)
+  return issues.length === 0
 })

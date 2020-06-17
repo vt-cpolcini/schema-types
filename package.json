@@ -27,6 +27,8 @@
     "@types/node": "^12",
     "@wessberg/rollup-plugin-ts": "^1.2.25",
     "ava": "^3.9.0",
+    "ava-fast-check": "^1.1.2",
+    "fast-check": "^1.25.1",
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
     "rollup": "^2.16.1",
