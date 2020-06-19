@@ -1,7 +1,7 @@
 import {_code} from '../helpers/code'
 import {ValidationIssue, _validate} from '../helpers/validate'
 import {SchemaType, TypeOf, withTypeSymbol} from './base'
-import {isObjectType, ObjectProperties, ObjectType} from './object'
+import {isObjectType, ObjectType} from './object'
 
 export interface IntersectionType<Left extends SchemaType, Right extends SchemaType>
   extends SchemaType<TypeOf<Left> & TypeOf<Right>> {
@@ -24,7 +24,7 @@ function mergeIntersectionTypes(left: SchemaType, right: SchemaType): SchemaType
     return [left, right]
   }
 
-  const mergedObjectType: ObjectType<ObjectProperties> = withTypeSymbol({type: 'object', properties: {}})
+  const mergedObjectType: ObjectType = withTypeSymbol({type: 'object', properties: {}})
   for (const objectType of [left, right]) {
     const keys = Object.keys(objectType.properties)
     for (const key of keys) {

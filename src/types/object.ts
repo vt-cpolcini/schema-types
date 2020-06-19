@@ -59,7 +59,8 @@ type OptionalProps<T extends ObjectProperties> = {
 
 type RequiredProps<T extends ObjectProperties> = Exclude<keyof T, OptionalProps<T>>
 
-export interface ObjectType<T extends ObjectProperties> extends SchemaType<TypeFromObjectProperties<T>> {
+export interface ObjectType<T extends ObjectProperties = ObjectProperties>
+  extends SchemaType<TypeFromObjectProperties<T>> {
   type: 'object'
   properties: T
 }
