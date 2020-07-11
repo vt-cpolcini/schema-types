@@ -1,4 +1,4 @@
-# Snapshot report for `src/test/string.test.ts`
+# Snapshot report for `test/string.test.ts`
 
 The actual snapshot is saved in `string.test.ts.snap`.
 

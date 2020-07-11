@@ -1,4 +1,4 @@
-# Snapshot report for `src/test/boolean.test.ts`
+# Snapshot report for `test/boolean.test.ts`
 
 The actual snapshot is saved in `boolean.test.ts.snap`.
 

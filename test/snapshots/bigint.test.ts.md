@@ -1,4 +1,4 @@
-# Snapshot report for `src/test/bigint.test.ts`
+# Snapshot report for `test/bigint.test.ts`
 
 The actual snapshot is saved in `bigint.test.ts.snap`.
 

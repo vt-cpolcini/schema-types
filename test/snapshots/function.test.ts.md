@@ -1,4 +1,4 @@
-# Snapshot report for `src/test/function.test.ts`
+# Snapshot report for `test/function.test.ts`
 
 The actual snapshot is saved in `function.test.ts.snap`.
 

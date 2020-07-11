@@ -84,7 +84,7 @@ export const validate = <T extends ObjectProperties>(
   const valueKeys = new Set<string>(Object.keys(value))
 
   const extraKeys = new Set([...valueKeys].filter((key) => !schemaKeys.has(key)))
-  const requiredKeys = new Set<string>([...schemaKeys].filter((key) => isOptionalType(schema.properties[key])))
+  const requiredKeys = new Set<string>([...schemaKeys].filter((key) => !isOptionalType(schema.properties[key])))
   const missingKeys = new Set([...requiredKeys].filter((key) => !valueKeys.has(key)))
 
   const issues: ValidationIssue[] = []

@@ -25,3 +25,22 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(objectType, 'string'))
   t.snapshot(T.validate(objectType, undefined))
 })
+
+export const optionalObjectType = T.object({
+  a: T.string(),
+  b: T.optional(T.string()),
+  c: T.optional(T.array(T.string())),
+})
+
+test('Return no issues valid objects with optional properties', (t) => {
+  t.deepEqual(T.validate(optionalObjectType, {a: 'a'}), [])
+  t.deepEqual(T.validate(optionalObjectType, {a: 'a', b: 'b'}), [])
+  t.deepEqual(T.validate(optionalObjectType, {a: 'a', c: ['c']}), [])
+  t.deepEqual(T.validate(optionalObjectType, {a: 'a', b: 'b', c: ['c']}), [])
+})
+
+test('Return issues for invalid objects with optional properties', (t) => {
+  t.snapshot(T.validate(optionalObjectType, {}))
+  t.snapshot(T.validate(optionalObjectType, {a: 'a', b: 123}))
+  t.snapshot(T.validate(optionalObjectType, {a: 'a', d: 'd'}))
+})
