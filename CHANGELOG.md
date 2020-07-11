@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.1 - 2020-07-11
+
+- Fix issue that caused all optional object properties to be required
+
 ## v2.1.0 - 2020-06-19
 
 - Set the default generic value of `ObjectType` to `ObjectProperties`, export `ObjectProperties`
