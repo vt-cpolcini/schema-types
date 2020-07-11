@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.2 - 2020-07-11
+
+- Fix issue where `assert` did not throw on error
+
 ## v2.1.1 - 2020-07-11
 
 - Fix issue that caused all optional object properties to be required

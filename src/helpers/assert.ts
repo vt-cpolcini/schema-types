@@ -12,7 +12,7 @@ export class SchemaTypeError extends Error {
 
 export const assert = <T extends SchemaType>(schema: T, value: unknown): asserts value is TypeOf<T> => {
   const issues = _validate(schema, value, [])
-  if (issues.length === 0) {
+  if (issues.length !== 0) {
     throw new SchemaTypeError('Invalid type, did not pass schema validation', issues)
   }
 }
