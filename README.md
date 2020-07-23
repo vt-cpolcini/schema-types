@@ -2,15 +2,13 @@
 
 # schema-types [![Build Status](https://github.com/schema-types/schema-types/workflows/CI/badge.svg)](https://github.com/schema-types/schema-types/actions) [![codecov](https://codecov.io/gh/schema-types/schema-types/branch/main/graph/badge.svg)](https://codecov.io/gh/schema-types/schema-types)
 
-**Status:** Alpha
-
-This library provides runtime and compile-type type schema definition and validation. It is roughly usable, but still evolving.
+This library provides runtime and compile-type type schema definition and validation.
 
 ### Goals
 
-- As close to JSON Schema as possible (represent the type schema as pure data)
-- High level of developer ergonomics (easy to define types, validate)
-- Full modern TypeScript support (only target latest TypeScript, use all advanced features)
+- Zero dependencies!
+- High level of developer ergonomics
+- Full modern TypeScript support
 
 ## Type Compatibility
 
