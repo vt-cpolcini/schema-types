@@ -23,7 +23,7 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(functionType, undefined))
 })
 
-testProp('Return no issues for arbitrary functions', [fc.func(fc.anything())], (func) => {
+testProp('Return no issues for arbitrary functions', [fc.func(fc.anything())], (t, func) => {
   const issues = T.validate(functionType, func)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })

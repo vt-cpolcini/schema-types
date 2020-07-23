@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
-  "types": "./dist/cjs/index.d.ts",
+  "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist"
@@ -25,17 +25,18 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/node": "^12",
-    "@wessberg/rollup-plugin-ts": "^1.2.25",
-    "ava": "^3.9.0",
-    "ava-fast-check": "^1.1.2",
-    "expect-type": "^0.7.4",
-    "fast-check": "^1.25.1",
+    "ava": "^3.10.1",
+    "ava-fast-check": "^2.0.0",
+    "expect-type": "^0.7.8",
+    "fast-check": "^1.26.0",
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
-    "rollup": "^2.16.1",
+    "rollup": "^2.22.2",
+    "rollup-plugin-dts": "^1.4.9",
+    "rollup-plugin-typescript2": "^0.27.1",
     "source-map-support": "^0.5.19",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.7"
   },
   "funding": {
     "type": "GitHub",

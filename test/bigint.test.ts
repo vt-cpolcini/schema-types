@@ -20,7 +20,7 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(bigintType, undefined))
 })
 
-testProp('Return no issues for arbitrary bigints', [fc.bigInt()], (bigint) => {
+testProp('Return no issues for arbitrary bigints', [fc.bigInt()], (t, bigint) => {
   const issues = T.validate(bigintType, bigint)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })

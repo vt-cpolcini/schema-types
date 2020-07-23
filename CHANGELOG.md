@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.3 - 2020-07-23
+
+- Fix issue where `assert` was missing `asserts` type modifier
+
 ## v2.1.2 - 2020-07-11
 
 - Fix issue where `assert` did not throw on error

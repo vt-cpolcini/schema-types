@@ -21,7 +21,7 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(booleanType, undefined))
 })
 
-testProp('Return no issues for arbitrary booleans', [fc.boolean()], (boolean) => {
+testProp('Return no issues for arbitrary booleans', [fc.boolean()], (t, boolean) => {
   const issues = T.validate(booleanType, boolean)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })

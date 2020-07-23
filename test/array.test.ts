@@ -39,7 +39,7 @@ test('Return issues for incorrect wrapped type', (t) => {
   t.snapshot(T.validate(arrayType, ['string']))
 })
 
-testProp('Return no issues for arbitrary integer arrays', [fc.array(fc.integer())], (integerArray) => {
+testProp('Return no issues for arbitrary integer arrays', [fc.array(fc.integer())], (t, integerArray) => {
   const issues = T.validate(arrayType, integerArray)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })

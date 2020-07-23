@@ -27,8 +27,8 @@ const allowedLiteralTypes = fc.letrec((tie) => ({
   all: fc.oneof(tie('primitive'), tie('array'), tie('object')),
 }))
 
-testProp('Return no issues for arbitrary literals', [allowedLiteralTypes.all], (value) => {
+testProp('Return no issues for arbitrary literals', [allowedLiteralTypes.all], (t, value) => {
   const literalType = T.literal(value as any)
   const issues = T.validate(literalType, value)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })

@@ -4,8 +4,6 @@
     "target": "es2020",
     "module": "commonjs",
     "lib": ["es2020"],
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
@@ -19,5 +17,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["test"]
+  "exclude": ["dist", "test"]
 }

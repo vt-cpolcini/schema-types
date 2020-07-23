@@ -20,7 +20,7 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(stringType, undefined))
 })
 
-testProp('Return no issues for arbitrary strings', [fc.string()], (string) => {
+testProp('Return no issues for arbitrary strings', [fc.string()], (t, string) => {
   const issues = T.validate(stringType, string)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })

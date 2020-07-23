@@ -20,17 +20,17 @@ test('Return issues for other types', (t) => {
   t.snapshot(T.validate(numberType, undefined))
 })
 
-testProp('Return no issues for arbitrary integers', [fc.integer()], (integer) => {
+testProp('Return no issues for arbitrary integers', [fc.integer()], (t, integer) => {
   const issues = T.validate(numberType, integer)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })
 
-testProp('Return no issues for arbitrary floats', [fc.float()], (float) => {
+testProp('Return no issues for arbitrary floats', [fc.float()], (t, float) => {
   const issues = T.validate(numberType, float)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })
 
-testProp('Return no issues for arbitrary doubles', [fc.double()], (double) => {
+testProp('Return no issues for arbitrary doubles', [fc.double()], (t, double) => {
   const issues = T.validate(numberType, double)
-  return issues.length === 0
+  t.true(issues.length === 0)
 })
