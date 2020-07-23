@@ -65,7 +65,7 @@ try {
 }
 
 // Generate TypeScript code for codegen
-T.code(test) //=> {"name": string; "age": number; "locked"?: (boolean | undefined)}
+T.code(userType) //=> {"name": string; "age": number; "locked"?: (boolean | undefined)}
 ```
 
 ## Type Compatibility
