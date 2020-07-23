@@ -4,15 +4,73 @@
 
 This library provides runtime and compile-type type schema definition and validation.
 
-### Goals
+### Features
 
 - Zero dependencies!
 - High level of developer ergonomics
 - Full modern TypeScript support
+- IntelliSense support
+
+## Installation
+
+```shell
+$ yarn add schema-types
+```
+
+## Example
+
+```typescript
+import * as T from 'schema-types'
+
+// NOTE: documentation comments on the properties will appear in IntelliSense
+const userType = T.object({
+  /** The user's name */
+  name: T.string(),
+
+  /** The user's age */
+  age: T.number(),
+
+  /** Is the user account locked? */
+  locked: T.optional(T.boolean()),
+})
+
+// Create a compile-time type alias for the schema type
+type User = T.TypeOf<typeof userType>
+
+// Use the compile-time type
+export const user: User = {
+  name: 'Alice',
+  age: 32,
+}
+
+// Unknown data from user input, an API response, etc
+const data: unknown = ...
+
+// Return any validation issues
+T.validate(userType, data) //=> [] (no issues)
+
+T.validate(userType, {name: 'Alice', age: '32'}) //=> [{type: 'INVALID_TYPE', message: 'Invalid type, expected number, got string 32', path: '/age'}]
+
+// Use a type-guard to refine the type
+if (T.is(userType, data)) {
+  // data is typed as `User`
+}
+
+// T.assert() throws an error if the data fails to validate
+try {
+  T.assert(userType, data)
+  // data is typed as `User` (using TypeScript's `asserts` return type)
+} catch (error) {
+  console.log(error.issues) // logs the issues causing validation failure
+}
+
+// Generate TypeScript code for codegen
+T.code(test) //=> {"name": string; "age": number; "locked"?: (boolean | undefined)}
+```
 
 ## Type Compatibility
 
-Implemented types:
+Types:
 
 | TypeScript          | schema-types       |
 | ------------------- | ------------------ |
@@ -35,7 +93,7 @@ Implemented types:
 | Union               | `T.union()`        |
 | Intersection        | `T.intersection()` |
 
-Implemented modifiers:
+Modifiers:
 
 | TypeScript | schema-types   |
 | ---------- | -------------- |
