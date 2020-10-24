@@ -63,10 +63,11 @@ export interface ObjectType<T extends ObjectProperties = ObjectProperties>
   extends SchemaType<TypeFromObjectProperties<T>> {
   type: 'object'
   properties: T
+  strict: boolean
 }
 
-export const object = <T extends ObjectProperties>(properties: T): ObjectType<T> =>
-  withTypeSymbol({type: 'object', properties})
+export const object = <T extends ObjectProperties>(properties: T, strict = true): ObjectType<T> =>
+  withTypeSymbol({type: 'object', properties, strict})
 
 export const isObjectType = <T extends ObjectProperties>(value: SchemaType): value is ObjectType<T> =>
   value.type === 'object'
@@ -89,7 +90,7 @@ export const validate = <T extends ObjectProperties>(
 
   const issues: ValidationIssue[] = []
 
-  if (extraKeys.size > 0) {
+  if (schema.strict && extraKeys.size > 0) {
     issues.push({
       type: 'INVALID_VALUE',
       message: `Value provided unexpected keys: ${[...extraKeys].join(', ')}`,

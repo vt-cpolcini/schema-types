@@ -44,3 +44,15 @@ test('Return issues for invalid objects with optional properties', (t) => {
   t.snapshot(T.validate(optionalObjectType, {a: 'a', b: 123}))
   t.snapshot(T.validate(optionalObjectType, {a: 'a', d: 'd'}))
 })
+
+const strictObjectType = T.object({an: T.string()}, true)
+const looseObjectType = T.object({an: T.string()}, false)
+
+test('Return issues for invalid objects with additional properties', (t) => {
+  t.snapshot(T.validate(objectType, {an: 'object', extra: 'prop'}))
+  t.snapshot(T.validate(strictObjectType, {an: 'object', extra: 'prop'}))
+})
+
+test('Return no issues for loose objects with additional properties', (t) => {
+  t.deepEqual(T.validate(looseObjectType, {an: 'object', extra: 'prop'}), [])
+})

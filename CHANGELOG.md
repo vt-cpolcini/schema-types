@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.0 - 2020-10-24
+
+- Add support for loose object validation (allow additional properties)
+
 ## v2.1.4 - 2020-07-23
 
 - Update package README
