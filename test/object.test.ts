@@ -56,3 +56,14 @@ test('Return issues for invalid objects with additional properties', (t) => {
 test('Return no issues for loose objects with additional properties', (t) => {
   t.deepEqual(T.validate(looseObjectType, {an: 'object', extra: 'prop'}), [])
 })
+
+const strictStrictIntersectionObjectType = T.intersection(T.object({a: T.string()}), T.object({b: T.string()}))
+const strictLooseIntersectionObjectType = T.intersection(T.object({a: T.string()}), T.object({b: T.string()}, false))
+
+test('Intersection of strict and strict object returns strict object', (t) => {
+  t.snapshot(T.validate(strictStrictIntersectionObjectType, {a: 'a', b: 'b', c: 'c'}))
+})
+
+test('Intersection of strict and loose object returns loose object', (t) => {
+  t.deepEqual(T.validate(strictLooseIntersectionObjectType, {a: 'a', b: 'b', c: 'c'}), [])
+})
