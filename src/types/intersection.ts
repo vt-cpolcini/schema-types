@@ -24,7 +24,8 @@ function mergeIntersectionTypes(left: SchemaType, right: SchemaType): SchemaType
     return [left, right]
   }
 
-  const mergedObjectType: ObjectType = withTypeSymbol({type: 'object', properties: {}})
+  const strict = left.strict && right.strict
+  const mergedObjectType: ObjectType = withTypeSymbol({type: 'object', properties: {}, strict})
   for (const objectType of [left, right]) {
     const keys = Object.keys(objectType.properties)
     for (const key of keys) {
