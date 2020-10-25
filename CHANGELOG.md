@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.0 - 2020-10-25
+
+- Export the `ValidationIssue` type
+
 ## v2.2.0 - 2020-10-24
 
 - Add support for loose object validation (allow additional properties)
