@@ -2,7 +2,7 @@
 export {assert} from './helpers/assert'
 export {code} from './helpers/code'
 export {is} from './helpers/is'
-export {validate} from './helpers/validate'
+export {validate, ValidationIssue} from './helpers/validate'
 
 // Modifiers
 export {ModifiedType} from './modifiers/modified'
