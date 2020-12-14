@@ -926,10 +926,10 @@ esutils@^2.0.3:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
-expect-type@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/expect-type/-/expect-type-0.10.0.tgz#0d0125715045fa611edf5da58b6fb50e81ea7b55"
-  integrity sha512-Y3IJY/RPItzebmwBFDtbM9VrOdn5hYquo6aQKkIzA4Z4klPWPIEpwZSsck418eIRkvh/vguQtvcgqeNHM9JX2w==
+expect-type@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/expect-type/-/expect-type-0.11.0.tgz#bce1a3e283f0334eedb39699b57dd27be7009cc1"
+  integrity sha512-hkObxepDKhTYloH/UZoxYTT2uUzdhvDEwAi0oqdk29XEkHF8p+5ZRpX/BZES2PtGN9YgyEqutIjXfnL9iMflMw==
 
 fast-check@^2.6.0:
   version "2.8.0"
