@@ -381,9 +381,9 @@ astral-regex@^2.0.0:
   integrity sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==
 
 ava-fast-check@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/ava-fast-check/-/ava-fast-check-4.0.0.tgz#bc4cba841925e314bef43959944d92f9507c96bd"
-  integrity sha512-re8kEnzOrpPMoTnvoCqtVyg1aZtEVEfnCrUx6bWVlrJ9F8PhUHdNdHcZkjnkCuj1OddUvtYg2A3HFsyWl7WzSQ==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/ava-fast-check/-/ava-fast-check-4.0.1.tgz#08f9f57be9449322ea8cfb3843847c812fa2de7b"
+  integrity sha512-SiPd3L7QJHkOhyQCFIx6g0XDu7909uYzRef7oJetDZjxQMtPasm1wF5cR8rlWc0HwG4gd4KH0Q6uvdqcVntgbw==
 
 ava@^3.13.0:
   version "3.15.0"
