@@ -1,6 +1,6 @@
 <p align="center"><img src="https://schema-types.dev/logo.png" alt="schema-types logo" width="128" /></p>
 
-# schema-types [![npm version](https://badgen.net/npm/v/schema-types)](https://www.npmjs.com/package/schema-types) [![Build Status](https://github.com/schema-types/schema-types/workflows/CI/badge.svg)](https://github.com/schema-types/schema-types/actions) [![codecov](https://codecov.io/gh/schema-types/schema-types/branch/main/graph/badge.svg)](https://codecov.io/gh/schema-types/schema-types)
+# schema-types [![npm version](https://badgen.net/npm/v/schema-types)](https://www.npmjs.com/package/schema-types) [![Build Status](https://github.com/schema-types/schema-types/workflows/CI/badge.svg)](https://github.com/schema-types/schema-types/actions)
 
 This library provides runtime and compile-type type schema definition and validation.
 

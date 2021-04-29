@@ -21,4 +21,3 @@ jobs:
       - run: yarn build
       - run: yarn test-type-check
       - run: yarn test-coverage
-      - uses: codecov/codecov-action@v1
