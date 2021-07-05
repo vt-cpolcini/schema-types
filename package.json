@@ -24,7 +24,7 @@
   "dependencies": {},
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@types/node": "^15.0.1",
+    "@types/node": "^16.0.0",
     "ava": "^3.13.0",
     "ava-fast-check": "^4.0.0",
     "expect-type": "^0.11.0",
