@@ -25,7 +25,7 @@ export const optional = <T extends SchemaType>(item: T): OptionalWrapped<T> => {
     return wrapped as OptionalWrapped<T>
   }
 
-  return withTypeSymbol({type: 'modified', optional: true, item}) as OptionalWrapped<T>
+  return withTypeSymbol({optional: true, ...item}) as OptionalWrapped<T>
 }
 
 export const isOptionalType = <T extends SchemaType>(value: SchemaType<unknown>): value is OptionalType<T> =>

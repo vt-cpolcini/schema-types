@@ -25,7 +25,7 @@ export const readonly = <T extends SchemaType>(item: T): ReadonlyWrapped<T> => {
     return wrapped as ReadonlyWrapped<T>
   }
 
-  return withTypeSymbol({type: 'modified', readonly: true, item}) as ReadonlyWrapped<T>
+  return withTypeSymbol({readonly: true, ...item}) as ReadonlyWrapped<T>
 }
 
 export const isReadonlyType = <T extends SchemaType>(value: SchemaType<unknown>): value is ReadonlyType<T> =>
