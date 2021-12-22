@@ -1,6 +1,6 @@
 {
   "name": "@vt-cpolcini/schema-types",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Runtime and compile-type type schema definition and validation",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
