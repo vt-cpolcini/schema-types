@@ -8,6 +8,8 @@ export interface SchemaType<T = unknown> {
   readonly?: boolean
   computed?: boolean
   isInnerBlock?: boolean
+  minItems?: number
+  maxItems?: number
 }
 
 export function withTypeSymbol<T, Value = unknown>(value: Value): Value & {[TypeSymbol]: T} {
